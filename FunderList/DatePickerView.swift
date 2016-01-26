@@ -7,15 +7,37 @@
 //
 
 import UIKit
+import Foundation
+
+// so we can talk to the TodoViewController
+protocol DatePickerViewDelegate {
+    func removePressed()
+    func donePressed()
+    func datePickerValueChanged(date: NSDate)
+
+}
 
 class DatePickerView: UIView {
 
-    /*
-    // Only override drawRect: if you perform custom drawing.
-    // An empty implementation adversely affects performance during animation.
-    override func drawRect(rect: CGRect) {
-        // Drawing code
+    @IBOutlet weak var datePicker: UIDatePicker!
+    
+    var delegate: DatePickerViewDelegate?
+    
+    @IBAction func removeBarButtonItemPressed(sender: UIBarButtonItem) {
+        //function called on delegate so TodoViewController knows to listen to the DatePickerView
+        delegate?.removePressed()
     }
-    */
+    
+    @IBAction func doneBarButtonItemPressed(sender: UIBarButtonItem) {
+        //function called on delegate so TodoViewController knows to listen to the DatePickerView
+        delegate?.donePressed()
+    }
+    
+    
+    @IBAction func datePickerChanged(sender: UIDatePicker) {
+    
+        delegate?.datePickerValueChanged(sender.date)
+    }
+    
 
 }

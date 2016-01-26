@@ -14,13 +14,15 @@ class TodosViewController: UIViewController {
     
     var baseArray: [[TodoModel]] = []
     
+    var selectedTodoIndexPath: NSIndexPath!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         // Do any additional setup after loading the view.
-        let todo1 = TodoModel(Title: "Study iOS", favorited: false, dueDate: NSDate(), completed: false, repeated: nil, reminder: nil)
-        let todo2 = TodoModel(Title: "Eat dinner", favorited: false, dueDate: NSDate(), completed: false, repeated: nil, reminder: nil)
-        let todo3 = TodoModel(Title: "Gym", favorited: false, dueDate: NSDate(), completed: false, repeated: nil, reminder: nil)
+        let todo1 = TodoModel(title: "Study iOS", favorited: false, dueDate: NSDate(), completed: false, repeated: nil, reminder: nil)
+        let todo2 = TodoModel(title: "Eat dinner", favorited: false, dueDate: NSDate(), completed: false, repeated: nil, reminder: nil)
+        let todo3 = TodoModel(title: "Gym", favorited: false, dueDate: NSDate(), completed: false, repeated: nil, reminder: nil)
         
         // holds todos and completed todos
         baseArray = [[todo1, todo2, todo3], []]
@@ -28,6 +30,11 @@ class TodosViewController: UIViewController {
         // set dataSource and delegate to self
         tableView.dataSource = self
         tableView.delegate = self
+        
+        //tableview background color
+        tableView.backgroundColor = UIColor.clearColor()
+        
+        
         
         // footer for tableView
         // to create need an instance of a UIView - because footer view is initially set as nil!
@@ -39,6 +46,14 @@ class TodosViewController: UIViewController {
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardWillShow:", name: UIKeyboardWillShowNotification, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardWillHide:", name: UIKeyboardWillHideNotification, object: nil)
         
+        // ways to enter editing mode
+        let gestureRecognizer = UILongPressGestureRecognizer(target: self, action: "longPressRecognized:")
+        
+        gestureRecognizer.minimumPressDuration = 1.0
+        gestureRecognizer.numberOfTouchesRequired = 1
+        
+        tableView.addGestureRecognizer(gestureRecognizer)
+        
         
     }
 
@@ -47,7 +62,25 @@ class TodosViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if segue.identifier == "todosToTodoSegue" {
+            let indexPath = sender as! NSIndexPath
+            //figure out which has been tapped
+            let selectedTodo = baseArray[indexPath.section - 1][indexPath.row]
+            
+            // the segue has the view controller we are going to already mapped, but it doesn't know what type. use as!
+            let todoViewController = segue.destinationViewController as! TodoViewController
+            
+            todoViewController.todo = selectedTodo
+            todoViewController.mainVC = self
+        }
+    }
 
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+        tableView.reloadData()
+    }
+    
     @IBAction func editBarButtonItemTapped(sender: UIBarButtonItem) {
         
         if sender.title == "Edit" {
@@ -58,8 +91,8 @@ class TodosViewController: UIViewController {
                 tableView.setEditing(true, animated: true)
             }
         }
-            
-            // NEW CODE STARTS HERE
+    
+        // NEW CODE STARTS HERE
         else if sender.title == "Done" {
             let indexPathOfAddTodoCell = NSIndexPath(forRow: 0, inSection: 0)
             
@@ -68,7 +101,7 @@ class TodosViewController: UIViewController {
             // "" because textfield doesn't return nil if empty. It returns an empty string.
             if addTodoTableViewCell.addTodoTextField.text != "" {
                 
-                let newTodo = TodoModel(Title: addTodoTableViewCell.addTodoTextField.text!, favorited: addTodoTableViewCell.favorited, dueDate: nil, completed: false, repeated: nil, reminder: nil)
+                let newTodo = TodoModel(title: addTodoTableViewCell.addTodoTextField.text!, favorited: addTodoTableViewCell.favorited, dueDate: nil, completed: false, repeated: nil, reminder: nil)
                 
                 // add to base array
                 baseArray[0].append(newTodo)
@@ -80,11 +113,10 @@ class TodosViewController: UIViewController {
                 //make the keyboard disappear
                 addTodoTableViewCell.addTodoTextField.resignFirstResponder()
                 
-                
-                
             }
+                
             else {
-                print("else stateent evaluating")
+                
                 let alert = UIAlertController(title: "Invalid Todo", message: "Please enter a title before adding a todo", preferredStyle: .Alert)
                 alert.addAction(UIAlertAction(title: "Ok", style: .Default, handler: nil))
                 presentViewController(alert, animated: true, completion: nil)
@@ -98,6 +130,18 @@ class TodosViewController: UIViewController {
     // !!!!! ----- TODO tableView delegate extension ----- !!!!!
 
 extension TodosViewController: TodoTableViewDelegate {
+    
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        
+        if indexPath.section != 0 {
+            performSegueWithIdentifier("todosToTodoSegue", sender: indexPath)
+           selectedTodoIndexPath = indexPath
+            
+            tableView.deselectRowAtIndexPath(indexPath, animated: false)
+
+        }
+        
+    }
     
     func completeTodo(indexPath: NSIndexPath) {
         print("complete todo")
@@ -125,12 +169,28 @@ extension TodosViewController: TodoTableViewDelegate {
 
 extension TodosViewController: UITableViewDelegate {
     
+    func tableView(tableView: UITableView, didDeselectRowAtIndexPath indexPath: NSIndexPath) {
+        if indexPath.section != 0 {
+            performSegueWithIdentifier("todosToTodoSegue", sender: indexPath)
+            
+            selectedTodoIndexPath = indexPath
+
+            tableView.deselectRowAtIndexPath(indexPath, animated: false)
+        }
+    }
+    
     // remove delete buttons while in editing mode
     func tableView(tableView: UITableView, editingStyleForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCellEditingStyle {
         if tableView.editing {
             return .None
         }
         return .Delete
+    }
+    
+    // remove indent for rows when in editing mode (no longer a delete button)
+    
+    func tableView(tableView: UITableView, shouldIndentWhileEditingRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+        return false
     }
     
     // These two are needed for implementation of the footers. Before this is added need to set an UIView instance as done above: tableView.tableFooterView = UIView(frame: CGRectZero)
@@ -162,7 +222,7 @@ extension TodosViewController: UITableViewDelegate {
         return 0
     }
     
-    
+   
 }
 
 
@@ -209,7 +269,7 @@ extension TodosViewController: UITableViewDataSource {
             let currentTodo = baseArray[indexPath.section - 1][indexPath.row]
             let cell: TodoTableViewCell = tableView.dequeueReusableCellWithIdentifier("TodoCell") as! TodoTableViewCell
             
-            cell.titleLabel.text = currentTodo.Title
+            cell.titleLabel.text = currentTodo.title
             // date stuffs
             let dateStringFormatter = NSDateFormatter()
             dateStringFormatter.dateFormat = "yyyy-MM-dd"
@@ -313,6 +373,12 @@ extension TodosViewController: UITableViewDataSource {
             
             // end updates
             tableView.endUpdates()
+        }
+    }
+    
+    func longPressRecognized(gestureRecognizer: UILongPressGestureRecognizer) {
+        if !tableView.editing {
+            tableView.editing = true
         }
     }
     

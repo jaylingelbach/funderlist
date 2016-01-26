@@ -18,11 +18,10 @@ enum RepeatType: Int {
 
 struct TodoModel {
     
-    var Title: String
+    var title: String
     var favorited: Bool // refactor like below, right now the user is setting this.
     var dueDate: NSDate?
     var completed: Bool // refactor to be set as true. When it's created it shouldn't be automatically completed so the refactor would make sense
-    
     var repeated: RepeatType?
     var reminder: NSDate?
     
