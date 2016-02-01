@@ -8,9 +8,9 @@
 
 import UIKit
 
-protocol TodoTableViewDelegate {
-    func completeTodo(indexPath: NSIndexPath)
-    func favoriteTodo(indexPath: NSIndexPath)
+protocol TodoTableViewCellDelegate {
+    func completeTodo(cell: TodoTableViewCell)
+    func favoriteTodo(cell: TodoTableViewCell)
 }
 
 class TodoTableViewCell: UITableViewCell {
@@ -24,7 +24,7 @@ class TodoTableViewCell: UITableViewCell {
     @IBOutlet weak var dateLabel: UILabel!
     
     var indexPath : NSIndexPath!
-    var delegate : TodoTableViewDelegate?
+    var delegate : TodoTableViewCellDelegate?
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -38,11 +38,11 @@ class TodoTableViewCell: UITableViewCell {
     }
 
     @IBAction func completeButtonTapped(sender: UIButton) {
-        delegate?.completeTodo(indexPath)
+        delegate?.completeTodo(self)
     }
     
     @IBAction func favoriteButtonTapped(sender: UIButton) {
-        delegate?.favoriteTodo(indexPath)
+        delegate?.favoriteTodo(self)
     }
     
     override func setEditing(editing: Bool, animated: Bool) {

@@ -19,7 +19,10 @@
 		8D417CD31BC81D96004EBDCE /* AddTodoTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D417CD21BC81D96004EBDCE /* AddTodoTableViewCell.swift */; };
 		8D5699031C31E42100390982 /* TodoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D5699021C31E42100390982 /* TodoViewController.swift */; };
 		8D6976811C4D8C3C0086F806 /* RepeatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D6976801C4D8C3C0086F806 /* RepeatView.swift */; };
-		8D831C001BCD69000087FEBE /* TodoModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D831BFF1BCD69000087FEBE /* TodoModel.swift */; };
+		8D79015F1C59524E00265480 /* CDHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D79015E1C59524E00265480 /* CDHelper.swift */; };
+		8D7901621C5955EB00265480 /* TodoModel+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D7901601C5955EB00265480 /* TodoModel+CoreDataProperties.swift */; };
+		8D7901631C5955EB00265480 /* TodoModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D7901611C5955EB00265480 /* TodoModel.swift */; };
+		8D7901651C59577D00265480 /* Repeated.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D7901641C59577D00265480 /* Repeated.swift */; };
 		8D93EBD91C441BE1000CD34F /* DatePickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D93EBD81C441BE1000CD34F /* DatePickerView.swift */; };
 /* End PBXBuildFile section */
 
@@ -59,7 +62,10 @@
 		8D417CD21BC81D96004EBDCE /* AddTodoTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddTodoTableViewCell.swift; sourceTree = "<group>"; };
 		8D5699021C31E42100390982 /* TodoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TodoViewController.swift; sourceTree = "<group>"; };
 		8D6976801C4D8C3C0086F806 /* RepeatView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RepeatView.swift; sourceTree = "<group>"; };
-		8D831BFF1BCD69000087FEBE /* TodoModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TodoModel.swift; sourceTree = "<group>"; };
+		8D79015E1C59524E00265480 /* CDHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CDHelper.swift; sourceTree = "<group>"; };
+		8D7901601C5955EB00265480 /* TodoModel+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "TodoModel+CoreDataProperties.swift"; path = "../TodoModel+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		8D7901611C5955EB00265480 /* TodoModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TodoModel.swift; path = ../TodoModel.swift; sourceTree = "<group>"; };
+		8D7901641C59577D00265480 /* Repeated.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Repeated.swift; sourceTree = "<group>"; };
 		8D93EBD81C441BE1000CD34F /* DatePickerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DatePickerView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -112,6 +118,7 @@
 			isa = PBXGroup;
 			children = (
 				8D417C9C1BC81B4A004EBDCE /* AppDelegate.swift */,
+				8D79015E1C59524E00265480 /* CDHelper.swift */,
 				8D417CCF1BC81D05004EBDCE /* TodosViewController */,
 				8D417CA61BC81B4A004EBDCE /* Assets.xcassets */,
 				8D5699011C31E3E200390982 /* TodoViewController */,
@@ -165,7 +172,9 @@
 		8D831BFE1BCD68D90087FEBE /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				8D831BFF1BCD69000087FEBE /* TodoModel.swift */,
+				8D7901601C5955EB00265480 /* TodoModel+CoreDataProperties.swift */,
+				8D7901641C59577D00265480 /* Repeated.swift */,
+				8D7901611C5955EB00265480 /* TodoModel.swift */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -305,10 +314,13 @@
 				8D5699031C31E42100390982 /* TodoViewController.swift in Sources */,
 				8D6976811C4D8C3C0086F806 /* RepeatView.swift in Sources */,
 				8D417CA51BC81B4A004EBDCE /* FunderList.xcdatamodeld in Sources */,
-				8D831C001BCD69000087FEBE /* TodoModel.swift in Sources */,
+				8D79015F1C59524E00265480 /* CDHelper.swift in Sources */,
+				8D7901621C5955EB00265480 /* TodoModel+CoreDataProperties.swift in Sources */,
 				8D417CD11BC81D74004EBDCE /* TodoTableViewCell.swift in Sources */,
+				8D7901631C5955EB00265480 /* TodoModel.swift in Sources */,
 				8D93EBD91C441BE1000CD34F /* DatePickerView.swift in Sources */,
 				8D417CD31BC81D96004EBDCE /* AddTodoTableViewCell.swift in Sources */,
+				8D7901651C59577D00265480 /* Repeated.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

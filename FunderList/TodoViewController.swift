@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import CoreData
 
 
 class TodoViewController: UIViewController {
@@ -15,10 +16,10 @@ class TodoViewController: UIViewController {
     
     var todo: TodoModel!
     
-    var mainVC: TodosViewController!
-    
     var currentMenuView: UIView?
 
+    var context: NSManagedObjectContext?
+    
     @IBOutlet var datePickerView: DatePickerView!
     
     @IBOutlet var repeatPickerView: RepeatView!
@@ -32,13 +33,14 @@ class TodoViewController: UIViewController {
         super.viewDidLoad()
         //reuse identifier -- .self makes the whole class reusable
         tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "Cell")
-        
-        
-        if todo.completed {
+    
+        if todo.section == "pending" {
+            navigationItem.leftBarButtonItem?.title =  "Complete"
+        } else {
             navigationItem.leftBarButtonItem?.title = "Pending"
         }
         
-        if todo.favorited {
+        if todo.favorited != nil {
             navigationItem.rightBarButtonItem?.title = "Unfavorite"
         }
         
@@ -84,47 +86,30 @@ class TodoViewController: UIViewController {
     }
     
     @IBAction func completeBarButtonItemPressed(sender: UIBarButtonItem) {
-        todo.completed = !todo.completed
-        
-        mainVC.baseArray[mainVC.selectedTodoIndexPath.section - 1].removeAtIndex(mainVC.selectedTodoIndexPath.row)
-
-        if todo.completed {
-            mainVC.baseArray[1].append(todo)
+        if todo.section == "pending" {
+            todo.section = "completed"
+        } else {
+            todo.section = "completed"
         }
         
-        else {
-            mainVC.baseArray[0].append(todo)
-        }
         navigationController?.popViewControllerAnimated(true)
     }
 
     @IBAction func favoriteBarButtonItemPressed(sender: UIBarButtonItem) {
-        
-        todo.favorited = !todo.favorited
-        
-        mainVC.baseArray[mainVC.selectedTodoIndexPath.section-1].removeAtIndex(mainVC.selectedTodoIndexPath.row)
-        
-        if todo.completed {
-            mainVC.baseArray[1].append(todo)
-        }
-        else {
-            mainVC.baseArray[0].append(todo)
-        }
-        
-        if todo.favorited {
-            navigationItem.rightBarButtonItem?.title = "Unfavorite"
-        }
-        
-        else {
+        if (todo.favorited != nil) {
             navigationItem.rightBarButtonItem?.title = "Favorite"
+            todo.favorited = nil
         }
-        
+        else {
+            navigationItem.rightBarButtonItem?.title = "Unfavorite"
+            todo.favorited = 1
+        }
     }
 
     @IBAction func deleteBarButtonItemPressed(sender: UIBarButtonItem) {
-
-        mainVC.baseArray[mainVC.selectedTodoIndexPath.section-1].removeAtIndex(mainVC.selectedTodoIndexPath.row)
-        
+        if let object = todo, context = context {
+            context.deleteObject(object)
+        }
         navigationController?.popViewControllerAnimated(true)
     }
     
@@ -165,7 +150,7 @@ extension TodoViewController: RepeatViewDelegate {
     }
     
     func pickerViewDidSelect(type: RepeatType) {
-        todo.repeated = type
+        todo.repeated = type.rawValue
         tableView.reloadData()
     }
     
@@ -281,8 +266,9 @@ extension TodoViewController: UITableViewDataSource {
             }
             else {
                 cell.imageView?.image = UIImage(named: "repeat")
-                if let repeatFrequency = todo.repeated {
-                    cell.textLabel?.text = "Repeat \(repeatFrequency)"
+                
+                if let repeatFrequency = todo.repeated, repeatedName = RepeatType(rawValue: Int(repeatFrequency)) {
+                    cell.textLabel?.text = "Repeat \(repeatedName)"
                     cell.textLabel?.textColor = UIColor.blueColor()
                     cell.textLabel?.font = UIFont.boldSystemFontOfSize(17.0)
                 }

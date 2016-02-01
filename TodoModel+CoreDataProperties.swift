@@ -1,0 +1,24 @@
+//
+//  TodoModel+CoreDataProperties.swift
+//  FunderList
+//
+//  Created by Jay Lingelbach on 1/27/16.
+//  Copyright © 2016 Jay Lingelbach. All rights reserved.
+//
+//  Choose "Create NSManagedObject Subclass…" from the Core Data editor menu
+//  to delete and recreate this implementation file for your updated model.
+//
+
+import Foundation
+import CoreData
+
+extension TodoModel {
+
+    @NSManaged var title: String?
+    @NSManaged var dueDate: NSDate?
+    @NSManaged var reminder: NSDate?
+    @NSManaged var favorited: NSNumber?
+    @NSManaged var repeated: NSNumber?
+    @NSManaged var section: String?
+
+}
